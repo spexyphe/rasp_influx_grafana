@@ -106,7 +106,9 @@ sudo systemctl stop influxdb
 
 # replace the database locations in the config file
 sudo sed -i --expression "s@var/lib/influxdb/@media/SSD_Drive/influxdb/@" /etc/influxdb/influxdb.conf
-sudo sed -i --expression "s@# auth-enabled = true@auth-enabled = true@" /etc/influxdb/influxdb.conf
+sudo sed -i --expression "s@# auth-enabled = false@auth-enabled = true@" /etc/influxdb/influxdb.conf
+sudo sed -i --expression "s@# flux-enabled = false@flux-enabled = true@" /etc/influxdb/influxdb.conf
+
 
 # let influx load the config
 sudo influxd -config /etc/influxdb/influxdb.conf
