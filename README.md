@@ -5,6 +5,8 @@ This project enables you to make a influx/grafana server based on a raspberry pi
 
 between <> is content you will need to fill in yourself
 
+### todo: mount on reboot
+
 ## Hardware
 - A raspberry Pi 
   * I used a 3B+ (but presumably a 4 would work)
