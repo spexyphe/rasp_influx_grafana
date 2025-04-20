@@ -1,11 +1,11 @@
 
 # rasp_influx_grafana
-This project enables you to make a influx/grafana server based on a raspberry pi
+This project enables you to make a influx/grafana server based on a raspberry pi \
 between <> is content you will need to fill in yourself
 
 ### note!
-This project currently uses a rasp 3B+
-Therefore we are running influx oss 1.8, there is no further support for higher levels of influx for this version
+This project currently uses a rasp 3B+ \
+Therefore we are running influx oss 1.8, there is no further support for higher levels of influx for this version \
 An update of this project is to be expected. (rasp zero 2W is in order, it migh sound crazy but lets see if a zero can run this. if it does not perform I will move to a rasp 4)
 /
 # Hardware
@@ -43,70 +43,70 @@ Note: This code works with an ethernet cable connected
 - in the windwons terminal ssh pi@<rasp_ip>
 - default password in general is: raspberry
  
-note that it can happen that ssh keys get mismatched
-this happened to me when I did a clean flash of my micro sd card and hooked up the raspberry again. 
+note that it can happen that ssh keys get mismatched \
+this happened to me when I did a clean flash of my micro sd card and hooked up the raspberry again. \
 great odds it will reuse
  
-you will see a warning stating: "WARNING: REMOTE HOST IDENTIFICATION HAS CHANGED!"
+you will see a warning stating: "WARNING: REMOTE HOST IDENTIFICATION HAS CHANGED!" \
 ssh-keygen -R <rasp_ip>
  
 # once you are connected to raspberry pi
 ## terminal commands to download the sh file
-mkdir install_server
-cd install_server
-wget https://github.com/spexyphe/rasp_influx_grafana/archive/refs/heads/main.zip
+mkdir install_server \
+cd install_server \
+wget https://github.com/spexyphe/rasp_influx_grafana/archive/refs/heads/main.zip \
 unzip main.zip
 
 ## terminal commands to run the sh file
 bash rasp_influx_grafana-main/server_setup.sh
  
 ## add external drive to boot
-the ssh wil mount the external hd drive 
-but we need to also add it to the boot table  
+the ssh wil mount the external hd drive  \
+but we need to also add it to the boot table \  
 sudo nano /etc/fstab
   
-add the following line 
+add the following line \
 /dev/sda1 /media/SSD_Drive ext4 defaults 0 0 
  
-note, my external drive (as chosen in the ssh process, was sda1) 
+note, my external drive (as chosen in the ssh process, was sda1) \ 
 note, be carefull, messing this up can cause your system to not be able to boot again 
  
 # disable wlan power save
 when running on a wlan 
 
-check to see if power saving is on:
+check to see if power saving is on: \
 sudo iw wlan0 get power_save
 
-add line to /etc/rc.local, on a line above 'exit 0':
+add line to /etc/rc.local, on a line above 'exit 0': \
 /sbin/iw dev wlan0 set power_save off
 
-then do a reboot
-and recheck the power savings
+then do a reboot \
+and recheck the power savings \
 sudo iw wlan0 get power_save
 
 ref: https://forums.raspberrypi.com/viewtopic.php?t=292697
 
 # influx user admin: open a new terminal
 ## create a new database and a new user
-influx
-create database home
-use home
-create user grafana with password '<passwordhere>' with all privileges
-grant all privileges on home to grafana
-show us
+influx \
+create database home \
+use home \
+create user grafana with password '<passwordhere>' with all privileges \
+grant all privileges on home to grafana \
+show us \
  
 ## The output should show
-user admin
----- -----
+user admin \
+---- ----- \
 grafana true
  
  
 # grafana in web browser
-go to a web browser on your windwos machine
+go to a web browser on your windwos machine \
 http://<rasp_ip>:3000
  
-username: admin
-password: admin
+username: admin \
+password: admin \
  
 create a new password
  
