@@ -7,8 +7,12 @@ echo "- install grafana"
 
 echo ""
 echo "sh script: for safety purposes we first want to change the password"
-passwd
-
+read -p "Change password (y/n)?" choice
+case "$choice" in 
+  y|Y ) passwd;;
+  n|N ) echo "password has not been updated";;
+  * ) passwd;;
+esac
 
 echo ""
 echo "sh script: mount ssd drive"
@@ -46,6 +50,9 @@ sudo apt update
 #install unzip that we might need
 sudo apt install unzip
 
+# these packages are needed for grafana
+sudo apt-get install -y apt-transport-https software-properties-common wget
+
 echo ""
 echo "sh script: upgrade apt"
 sudo apt upgrade -y
@@ -54,15 +61,16 @@ echo ""
 echo "sh script: create correct links for apt to influx and grafana"
 
 #download influx keys
-wget -qO- https://repos.influxdata.com/influxdb.key | sudo apt-key add -
-
-#show add correct os version of influx to apt  
-source /etc/os-release
-echo "deb https://repos.influxdata.com/debian $(lsb_release -cs) stable" | sudo tee /etc/apt/sources.list.d/influxdb.list
+curl --silent --location -O https://repos.influxdata.com/influxdata-archive.key
+sha256sum --check - && cat influxdata-archive.key
+gpg --dearmor
+sudo tee /etc/apt/trusted.gpg.d/influxdata-archive.gpg > /dev/null && echo 'deb [signed-by=/etc/apt/trusted.gpg.d/influxdata-archive.gpg] https://repos.influxdata.com/debian stable main'
+sudo tee /etc/apt/sources.list.d/influxdata.list
 
 #add correct version of grafana
-wget -q -O - https://packages.grafana.com/gpg.key | sudo apt-key add -
-echo "deb https://packages.grafana.com/oss/deb stable main" | sudo tee /etc/apt/sources.list.d/grafana.list
+sudo mkdir -p /etc/apt/keyrings/
+wget -q -O - https://apt.grafana.com/gpg.key | gpg --dearmor | sudo tee /etc/apt/keyrings/grafana.gpg > /dev/null
+echo "deb [signed-by=/etc/apt/keyrings/grafana.gpg] https://apt.grafana.com stable main" | sudo tee -a /etc/apt/sources.list.d/grafana.list
 
 # re-update apt
 sudo apt update
@@ -71,13 +79,13 @@ echo ""
 echo "sh script: install influxdb"
 
 # install influx
-sudo apt install influxdb
+sudo apt-get install influxdb2
 
 echo "" 
 echo "sh script: install grafana"
 
 # install grafana
-sudo apt update && sudo apt install -y grafana
+sudo apt update && sudo apt-get install -y grafana
 
 echo ""
 echo "sh script: run grafana"
