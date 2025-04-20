@@ -62,7 +62,15 @@ echo "sh script: create correct links for apt to influx and grafana"
 
 #download influx keys
 curl --location -O https://repos.influxdata.com/influxdata-archive.key
-sha256sum --check - && cat influxdata-archive.key
+#sha256sum --check - && cat influxdata-archive.key
+
+read -p "Do you want to do a sha256 checksum (y/n)?" choice
+case "$choice" in 
+  y|Y ) sha256sum --check - && cat influxdata-archive.key;;
+  n|N ) echo "skipped checksum";;
+  * ) echo "skipped checksum";;
+esac
+
 gpg --dearmor
 sudo tee /etc/apt/trusted.gpg.d/influxdata-archive.gpg > /dev/null && echo 'deb [signed-by=/etc/apt/trusted.gpg.d/influxdata-archive.gpg] https://repos.influxdata.com/debian stable main'
 sudo tee /etc/apt/sources.list.d/influxdata.list
