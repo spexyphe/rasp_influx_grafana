@@ -120,14 +120,14 @@ sleep 10
 sudo systemctl stop influxdb
 
 # replace the database locations in the config file
-sudo sed -i --expression "s@var/lib/influxdb/@media/SSD_Drive/influxdb/@" /etc/influxdb/influxdb.conf
+sudo sed -i --expression "s@var/lib/influxdb/@media/SSD_Drive/influxdb/@" /etc/influxdb/config.toml
 
 #give influx acces to things it need to start
 sudo chmod +x /usr/lib/influxdb/scripts/influxd-systemd-start.sh 
 sudo chown -R influxdb:influxdb /media/SSD_Drive/influxdb/*
 
 # let influx load the config
-# sudo influxd -config /etc/influxdb/influxdb.conf
+# sudo influxd -config /etc/influxdb/config.toml
 
 #restart the influxdb service
 sudo systemctl start influxdb
