@@ -1,0 +1,3 @@
+bolt-path = "/media/SSD_Drive/influxdb/influxd.bolt"
+engine-path = "/media/SSD_Drive/influxdb/engine"
+http-bind-address = 8086
