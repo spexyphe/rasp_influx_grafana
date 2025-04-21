@@ -67,16 +67,20 @@ sudo apt upgrade -y
 echo ""
 echo "sh script: create correct links for apt to influx and grafana"
 
-#download influx keys
-curl --location -O https://repos.influxdata.com/influxdata-archive.key | cat influxdata-archive.key | gpg --dearmor | sudo tee /etc/apt/trusted.gpg.d/influxdata-archive.gpg > /dev/null && echo 'deb [signed-by=/etc/apt/trusted.gpg.d/influxdata-archive.gpg] https://repos.influxdata.com/debian stable main' | sudo tee /etc/apt/sources.list.d/influxdata.list
-
-#add correct version of grafana
 sudo mkdir -p /etc/apt/keyrings/
+
+#download influx and grafana keys
+wget -q -O - https://repos.influxdata.com/influxdata-archive.key | gpg --dearmor | sudo tee /etc/apt/trusted.gpg.d/influxdata-archive.gpg > /dev/null 
 wget -q -O - https://apt.grafana.com/gpg.key | gpg --dearmor | sudo tee /etc/apt/keyrings/grafana.gpg > /dev/null 
+
+echo 'deb [signed-by=/etc/apt/trusted.gpg.d/influxdata-archive.gpg] https://repos.influxdata.com/debian stable main' | sudo tee -a /etc/apt/sources.list.d/influxdata.list
 echo "deb [signed-by=/etc/apt/keyrings/grafana.gpg] https://apt.grafana.com stable main" | sudo tee -a /etc/apt/sources.list.d/grafana.list
 
 # re-update apt
 sudo apt update
+
+# wait 10 seconds to settle down
+sleep 10
 
 echo "" 
 echo "sh script: install influxdb"
