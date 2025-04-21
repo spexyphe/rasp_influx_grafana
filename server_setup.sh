@@ -68,23 +68,11 @@ echo ""
 echo "sh script: create correct links for apt to influx and grafana"
 
 #download influx keys
-curl --location -O https://repos.influxdata.com/influxdata-archive.key
-#sha256sum --check - && cat influxdata-archive.key
-
-read -p "Do you want to do a sha256 checksum (y/n)?" choice_sum
-case "$choice_sum" in 
-  y|Y ) sha256sum --check - && cat influxdata-archive.key;;
-  n|N ) echo "skipped checksum";;
-  * ) echo "skipped checksum";;
-esac
-
-gpg --dearmor --verbose
-sudo tee /etc/apt/trusted.gpg.d/influxdata-archive.gpg > /dev/null && echo 'deb [signed-by=/etc/apt/trusted.gpg.d/influxdata-archive.gpg] https://repos.influxdata.com/debian stable main'
-sudo tee /etc/apt/sources.list.d/influxdata.list
+curl --location -O https://repos.influxdata.com/influxdata-archive.key | cat influxdata-archive.key | gpg --dearmor | sudo tee /etc/apt/trusted.gpg.d/influxdata-archive.gpg > /dev/null && echo 'deb [signed-by=/etc/apt/trusted.gpg.d/influxdata-archive.gpg] https://repos.influxdata.com/debian stable main' | sudo tee /etc/apt/sources.list.d/influxdata.list
 
 #add correct version of grafana
 sudo mkdir -p /etc/apt/keyrings/
-wget -q -O - https://apt.grafana.com/gpg.key | gpg --dearmor | sudo tee /etc/apt/keyrings/grafana.gpg > /dev/null
+wget -q -O - https://apt.grafana.com/gpg.key | gpg --dearmor | sudo tee /etc/apt/keyrings/grafana.gpg > /dev/null 
 echo "deb [signed-by=/etc/apt/keyrings/grafana.gpg] https://apt.grafana.com stable main" | sudo tee -a /etc/apt/sources.list.d/grafana.list
 
 # re-update apt
