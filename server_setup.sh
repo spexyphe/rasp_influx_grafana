@@ -41,6 +41,13 @@ echo ""
 echo "sh script: verification if this folder is indeed stored on the selected drive"
 df /media/SSD_Drive
 
+read -p "Do you want to format the media (y/n)?" choice_disk
+case "$choice_disk" in 
+  y|Y ) fdisk /media/SSD_Drive;;
+  n|N ) echo "skipped formatting";;
+  * ) echo "skipped formatting";;
+esac
+
 echo ""
 echo "sh script: update apt"
 
@@ -64,14 +71,14 @@ echo "sh script: create correct links for apt to influx and grafana"
 curl --location -O https://repos.influxdata.com/influxdata-archive.key
 #sha256sum --check - && cat influxdata-archive.key
 
-read -p "Do you want to do a sha256 checksum (y/n)?" choice
-case "$choice" in 
+read -p "Do you want to do a sha256 checksum (y/n)?" choice_sum
+case "$choice_sum" in 
   y|Y ) sha256sum --check - && cat influxdata-archive.key;;
   n|N ) echo "skipped checksum";;
   * ) echo "skipped checksum";;
 esac
 
-gpg --dearmor
+gpg --dearmor --verbose
 sudo tee /etc/apt/trusted.gpg.d/influxdata-archive.gpg > /dev/null && echo 'deb [signed-by=/etc/apt/trusted.gpg.d/influxdata-archive.gpg] https://repos.influxdata.com/debian stable main'
 sudo tee /etc/apt/sources.list.d/influxdata.list
 
