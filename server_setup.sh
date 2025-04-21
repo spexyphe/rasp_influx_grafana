@@ -86,7 +86,7 @@ echo ""
 echo "sh script: install influxdb"
 
 # install influx
-sudo apt-get install influxdb2
+sudo apt-get install -y influxdb2
 
 echo "" 
 echo "sh script: install grafana"
