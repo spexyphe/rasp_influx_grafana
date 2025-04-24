@@ -86,6 +86,9 @@ sudo iw wlan0 get power_save
 
 ref: https://forums.raspberrypi.com/viewtopic.php?t=292697
 
+# give influx access to the folder:
+sudo chown -R influxdb:influxdb /media/SSD_Drive/influxdb/*
+
 # influx user admin: open a new terminal
 ## create a new database and a new user
 influx \
