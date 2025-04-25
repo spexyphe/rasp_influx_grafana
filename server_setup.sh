@@ -105,6 +105,9 @@ sudo systemctl enable grafana-server.service
 echo ""
 echo "sh script: run influx"
 
+#give influx access
+sudo chown -R influxdb:influxdb /media/SSD_Drive
+
 # enable influx
 sudo systemctl unmask influxdb.service
 sudo systemctl start influxdb
@@ -124,7 +127,9 @@ sudo sed -i --expression "s@var/lib/influxdb/@media/SSD_Drive/influxdb/@" /etc/i
 
 #give influx acces to things it need to start
 sudo chmod +x /usr/lib/influxdb/scripts/influxd-systemd-start.sh 
-sudo chown -R influxdb:influxdb /media/SSD_Drive/influxdb/*
+
+#old
+#sudo chown -R influxdb:influxdb /media/SSD_Drive/influxdb/*
 
 # let influx load the config
 # sudo influxd -config /etc/influxdb/config.toml
